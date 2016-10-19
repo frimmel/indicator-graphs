@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="d3/d3.js"></script>
+    <script src="d3-tip/d3-tip.js"></script>
+    <link href="d3-tip/d3-tip.css" media="all" rel="stylesheet"></link>
+    <style>
+        body { font: 12px Arial;}
+
+        * {
+            box-sizing: border-box;
+        }
+
+        path {
+            stroke: steelblue;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: grey;
+            stroke-width: 1;
+            shape-rendering: crispEdges;
+        }
+
+
+        .frame {
+        fill: none;
+        stroke: #000;
+        }
+
+        .axis text {
+        font: 10px sans-serif;
+        }
+
+        .axis line,
+        .axis circle {
+           fill: none;
+           stroke: #777;
+           stroke-dasharray: 1,4;
+        }
+
+        .axis :last-of-type circle {
+        stroke: #333;
+        stroke-dasharray: none;
+        }
+
+        .line {
+        fill: none;
+        stroke: #000;
+        stroke-width: 1.5px;
+        }
+
+        svg {
+          position: relative;
+        }
+
+        circle {
+          position: relative;
+          z-index: 0;
+        }
+
+        circle.active {
+          z-index: 100;
+        }
+
+        .graph-wrapper {
+          position: relative;
+        }
+    </style>
+  </head>
+  <body>
+    <svg width="960" height="500"></svg>
+
+    <script src="barchart.js"></script>
+    <script>
+      drawBarChart();
+    </script>
+  </body>
+</html>
