@@ -1,3 +1,5 @@
+var tip = d3.tip().attr('class', 'd3-tip').html(function (d) { return d; });
+
 function drawBarChart () {
     var svg = d3.select("svg"),
         margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -5,16 +7,11 @@ function drawBarChart () {
         height = +svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    svg.call(tip);
+
     var x = d3.scaleLinear()
-        .rangeRound([0, width])
-/*
-        .padding(0.3)
-        .align(0.3);
-    var x = d3.scaleBand()
-        .rangeRound([0, width])
-        .padding(0.3)
-        .align(0.3);
-*/
+        .rangeRound([0, width]);
+
     var y = d3.scaleLinear()
         .rangeRound([height, 0]);
 
@@ -43,7 +40,24 @@ function drawBarChart () {
                 .attr("x", function(d) { return x(d.data.Year); })
                 .attr("y", function(d) { return y(d[1]); })
                 .attr("height", function(d) { return y(d[0]) - y(d[1]); })
-                .attr("width", "20px");
+                .attr("width", "20px")
+                .on("mouseover", function (d) {
+                    var datastring = "";
+                    var bardata = d.data;
+
+                    datastring += "Year: " + bardata.Year + "</br>";
+                    if (bardata.AGGI) {
+                        datastring += "AGGI: " + bardata["AGGI"] + "</br>";
+                    }
+                    datastring += "Other: " + bardata["Other halogenated gases"] + "</br>";
+                    datastring += "CFC 11 and CFC 12: " + bardata["CFC 11 and CFC 12"] + "</br>";
+                    datastring += "Nitrous oxide: " + bardata["Nitrous oxide"] + "</br>";
+                    datastring += "Methane: " + bardata["Methane"] + "</br>";
+                    datastring += "Carbon dioxide: " + bardata["Carbon dioxide"] + "</br>";
+                    tip.show(datastring)
+                    console.log(d);
+                })
+                .on("mouseout", tip.hide);
 
         var xAxis = d3.axisBottom(x)
             .ticks(8)
