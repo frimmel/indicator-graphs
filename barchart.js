@@ -2,7 +2,7 @@ var tip = d3.tip().attr('class', 'd3-tip').html(function (d) { return d; });
 
 function drawBarChart () {
     var svg = d3.select("svg"),
-        margin = {top: 20, right: 20, bottom: 30, left: 40},
+        margin = {top: 20, right: 20, bottom: 30, left: 70},
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -22,8 +22,6 @@ function drawBarChart () {
 
     d3.csv("data/aggi_10_18_2016.csv", type, function(error, data) {
         if (error) throw error;
-
-        console.log(data)
 
         x.domain([data[0].Year - .7, parseInt(data[data.length-2].Year, 10) + 2]);
         y.domain([0, d3.max(data, function(d) { return d.total; })]).nice();
@@ -55,7 +53,6 @@ function drawBarChart () {
                     datastring += "Methane: " + bardata["Methane"] + "</br>";
                     datastring += "Carbon dioxide: " + bardata["Carbon dioxide"] + "</br>";
                     tip.show(datastring)
-                    console.log(d);
                 })
                 .on("mouseout", tip.hide);
 
@@ -70,15 +67,27 @@ function drawBarChart () {
 
         g.append("g")
             .attr("class", "axis axis--y")
-            .call(d3.axisLeft(y).ticks(10, "s"))
-            .append("text")
-                .attr("x", 2)
-                .attr("y", y(y.ticks(10).pop()))
-                .attr("dy", "0.35em")
-                .attr("text-anchor", "start")
-                .attr("fill", "#000")
-                .text("Radiative Forcing");
+            .call(d3.axisLeft(y).ticks(8, "s"));
 
+
+        g.append("text")
+            .attr("class", "axis-label axis--y-label")
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate("+ (-margin.left/2 - 16) +","+(height/2)+")rotate(-90)")
+            .text("Radiative Forcing");
+                    
+        g.append("text")
+            .attr("class", "axis-label axis--y-label axis-label-small")
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate("+ (-margin.left/2) +","+(height/2)+")rotate(-90)")
+            .text("[watts per square mile]");
+
+        g.append("text")
+            .attr("class", "graph-title")
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate("+ (width/2) +",20)")
+            .text("Annual Greenhouse Gas Index")
+                    
         var legend = g.selectAll(".legend")
             .data(data.columns.slice(1, data.columns.length - 1).reverse())
             .enter().append("g")
